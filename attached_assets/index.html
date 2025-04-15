@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Financeiro Familiar</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div id="auth-container">
+        <h1>Controle Financeiro</h1>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Senha">
+        <button id="btn-login">Entrar</button>
+        <button id="btn-signup">Criar Conta</button>
+        <p id="auth-error" class="error"></p>
+    </div>
+
+    <div id="app-container" style="display: none;">
+        <header>
+            <h1>Olá, <span id="user-name"></span>!</h1>
+            <button id="btn-logout">Sair</button>
+        </header>
+
+        <!-- Navegação do Mês -->
+        <div class="month-navigation">
+            <button id="prev-month" class="nav-button">&lt; Anterior</button>
+            <h2 id="current-month">Abril 2025</h2>
+            <button id="next-month" class="nav-button">Próximo &gt;</button>
+        </div>
+
+        <!-- Resumo Financeiro do Mês -->
+        <div class="summary-card">
+            <div class="summary-item">
+                <h3>Receitas</h3>
+                <p id="total-income" class="income">R$ 0,00</p>
+            </div>
+            <div class="summary-item">
+                <h3>Despesas</h3>
+                <p id="total-expenses" class="expense">R$ 0,00</p>
+            </div>
+            <div class="summary-item">
+                <h3>Saldo</h3>
+                <p id="balance" class="balance">R$ 0,00</p>
+            </div>
+        </div>
+
+        <!-- Tabs de Navegação -->
+        <div class="tabs">
+            <div class="tab active" data-tab="transactions-tab">Transações</div>
+            <div class="tab" data-tab="credit-cards-tab">Cartões de Crédito</div>
+            <div class="tab" data-tab="fixed-expenses-tab">Despesas Fixas</div>
+            <div class="tab" data-tab="reports-tab">Relatórios</div>
+        </div>
+
+        <!-- Conteúdo das Tabs -->
+        <div class="tab-content-container">
+            <!-- Tab de Transações -->
+            <div id="transactions-tab" class="tab-content active">
+                <div class="action-buttons">
+                    <button id="add-transaction-button" class="btn-primary">Nova Transação</button>
+                </div>
+                
+                <div id="transactions-list" class="list-container">
+                    <p class="empty-list">Carregando transações...</p>
+                </div>
+            </div>
+
+            <!-- Tab de Cartões de Crédito -->
+            <div id="credit-cards-tab" class="tab-content">
+                <div class="action-buttons">
+                    <button id="add-credit-card-button" class="btn-primary">Novo Cartão</button>
+                </div>
+                
+                <div id="credit-cards-list" class="list-container">
+                    <p class="empty-list">Carregando cartões...</p>
+                </div>
+            </div>
+
+            <!-- Tab de Despesas Fixas -->
+            <div id="fixed-expenses-tab" class="tab-content">
+                <div class="action-buttons">
+                    <button id="add-fixed-expense-button" class="btn-primary">Nova Despesa Fixa</button>
+                </div>
+                
+                <div id="fixed-expenses-list" class="list-container">
+                    <p class="empty-list">Carregando despesas fixas...</p>
+                </div>
+            </div>
+
+            <!-- Tab de Relatórios -->
+            <div id="reports-tab" class="tab-content">
+                <div class="report-options">
+                    <button id="category-report-button" class="btn-primary">Relatório por Categoria</button>
+                    <button id="monthly-report-button" class="btn-primary">Relatório Mensal</button>
+                </div>
+                <div id="report-container">
+                    <p class="empty-list">Selecione um tipo de relatório.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Transação -->
+    <div id="add-transaction-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Nova Transação</h2>
+            <form id="add-transaction-form">
+                <div class="form-group">
+                    <label for="transaction-description">Descrição</label>
+                    <input type="text" id="transaction-description" required>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-amount">Valor (R$)</label>
+                    <input type="number" id="transaction-amount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-date">Data</label>
+                    <input type="date" id="transaction-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-category">Categoria</label>
+                    <select id="transaction-category" required>
+                        <option value="">Selecione</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="transporte">Transporte</option>
+                        <option value="moradia">Moradia</option>
+                        <option value="lazer">Lazer</option>
+                        <option value="saude">Saúde</option>
+                        <option value="educacao">Educação</option>
+                        <option value="salario">Salário</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-type">Tipo</label>
+                    <select id="transaction-type" required>
+                        <option value="expense">Despesa</option>
+                        <option value="income">Receita</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-payment">Método de Pagamento</label>
+                    <select id="transaction-payment">
+                        <option value="money">Dinheiro</option>
+                        <option value="debit">Débito</option>
+                        <option value="credit">Cartão de Crédito</option>
+                        <option value="pix">PIX</option>
+                        <option value="transfer">Transferência</option>
+                    </select>
+                </div>
+                <div class="form-group" id="transaction-credit-card-container" style="display: none;">
+                    <label for="transaction-credit-card">Cartão de Crédito</label>
+                    <select id="transaction-credit-card">
+                        <!-- Será preenchido dinamicamente -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transaction-notes">Observações</label>
+                    <textarea id="transaction-notes"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="add-transaction-submit" class="btn-primary">Salvar</button>
+                    <button type="button" class="btn-secondary close-modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Cartão de Crédito -->
+    <div id="add-credit-card-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Novo Cartão de Crédito</h2>
+            <form id="add-credit-card-form">
+                <div class="form-group">
+                    <label for="credit-card-name">Nome do Cartão</label>
+                    <input type="text" id="credit-card-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="credit-card-bank">Banco</label>
+                    <input type="text" id="credit-card-bank" required>
+                </div>
+                <div class="form-group">
+                    <label for="credit-card-limit">Limite (R$)</label>
+                    <input type="number" id="credit-card-limit" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="credit-card-due-day">Dia de Vencimento</label>
+                    <input type="number" id="credit-card-due-day" min="1" max="31" required>
+                </div>
+                <div class="form-group">
+                    <label for="credit-card-closing-day">Dia de Fechamento</label>
+                    <input type="number" id="credit-card-closing-day" min="1" max="31" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="add-credit-card-submit" class="btn-primary">Salvar</button>
+                    <button type="button" class="btn-secondary close-modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Despesa Fixa -->
+    <div id="add-fixed-expense-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Nova Despesa Fixa</h2>
+            <form id="add-fixed-expense-form">
+                <div class="form-group">
+                    <label for="fixed-expense-description">Descrição</label>
+                    <input type="text" id="fixed-expense-description" required>
+                </div>
+                <div class="form-group">
+                    <label for="fixed-expense-amount">Valor (R$)</label>
+                    <input type="number" id="fixed-expense-amount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="fixed-expense-category">Categoria</label>
+                    <select id="fixed-expense-category" required>
+                        <option value="">Selecione</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="transporte">Transporte</option>
+                        <option value="moradia">Moradia</option>
+                        <option value="lazer">Lazer</option>
+                        <option value="saude">Saúde</option>
+                        <option value="educacao">Educação</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fixed-expense-payment">Método de Pagamento</label>
+                    <select id="fixed-expense-payment">
+                        <option value="money">Dinheiro</option>
+                        <option value="debit">Débito</option>
+                        <option value="credit">Cartão de Crédito</option>
+                        <option value="pix">PIX</option>
+                        <option value="transfer">Transferência</option>
+                    </select>
+                </div>
+                <div class="form-group" id="fixed-expense-credit-card-container" style="display: none;">
+                    <label for="fixed-expense-credit-card">Cartão de Crédito</label>
+                    <select id="fixed-expense-credit-card">
+                        <!-- Será preenchido dinamicamente -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fixed-expense-day">Dia do Mês</label>
+                    <input type="number" id="fixed-expense-day" min="1" max="31" required>
+                </div>
+                <div class="form-group">
+                    <label for="fixed-expense-notes">Observações</label>
+                    <textarea id="fixed-expense-notes"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="add-fixed-expense-submit" class="btn-primary">Salvar</button>
+                    <button type="button" class="btn-secondary close-modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

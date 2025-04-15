@@ -1,0 +1,369 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Autenticação */
+#auth-container {
+    text-align: center;
+    margin-top: 100px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#auth-container h1 {
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+input, button, select, textarea {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+button {
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#btn-signup {
+    background-color: #2ecc71;
+}
+
+#btn-signup:hover {
+    background-color: #27ae60;
+}
+
+.error {
+    color: #e74c3c;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* Cabeçalho do App */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 28px;
+}
+
+#btn-logout {
+    background-color: #e74c3c;
+    max-width: 100px;
+}
+
+#btn-logout:hover {
+    background-color: #c0392b;
+}
+
+/* Navegação do Mês */
+.month-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.month-navigation h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 22px;
+}
+
+.nav-button {
+    background-color: #ecf0f1;
+    color: #34495e;
+    border: 1px solid #bdc3c7;
+    width: auto;
+    padding: 8px 16px;
+}
+
+.nav-button:hover {
+    background-color: #bdc3c7;
+}
+
+/* Resumo Financeiro */
+.summary-card {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.summary-item {
+    text-align: center;
+    flex: 1;
+}
+
+.summary-item h3 {
+    margin: 0 0 10px 0;
+    color: #7f8c8d;
+    font-size: 16px;
+}
+
+.summary-item p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.income {
+    color: #27ae60;
+}
+
+.expense {
+    color: #e74c3c;
+}
+
+.balance {
+    color: #3498db;
+}
+
+/* Tabs de Navegação */
+.tabs {
+    display: flex;
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #ecf0f1;
+    border-radius: 8px 8px 0 0;
+    margin-right: 5px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.tab:hover {
+    background-color: #dfe6e9;
+}
+
+.tab.active {
+    background-color: white;
+    border-bottom: 2px solid #3498db;
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Conteúdo das Tabs */
+.tab-content-container {
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Formulários */
+.action-buttons {
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.form-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+
+.form-container h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #34495e;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    width: auto;
+    padding: 10px 20px;
+}
+
+/* Listas de Itens */
+.list-container {
+    margin-top: 20px;
+}
+
+.list-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item-details h4 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+}
+
+.list-item-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.list-item-amount {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.list-item-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    width: auto;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+.btn-edit {
+    background-color: #f39c12;
+}
+
+.btn-edit:hover {
+    background-color: #d35400;
+}
+
+.empty-list {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 20px;
+}
+
+/* Categoria Badges */
+.category-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    margin-right: 10px;
+}
+
+.category-alimentacao { background-color: #e67e22; }
+.category-transporte { background-color: #3498db; }
+.category-moradia { background-color: #9b59b6; }
+.category-lazer { background-color: #2ecc71; }
+.category-saude { background-color: #e74c3c; }
+.category-educacao { background-color: #f1c40f; }
+.category-salario { background-color: #27ae60; }
+.category-outros { background-color: #7f8c8d; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .summary-card {
+        flex-direction: column;
+    }
+    
+    .summary-item {
+        margin-bottom: 15px;
+    }
+    
+    .tabs {
+        flex-wrap: wrap;
+    }
+    
+    .tab {
+        margin-bottom: 5px;
+    }
+}
